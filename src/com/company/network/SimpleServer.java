@@ -17,6 +17,8 @@ public class SimpleServer {
     private final int TCP = 11111;
     private final int UDP = 22222;
     ServerGUI gui;
+    private boolean running;
+    private long startTime;
 
     public SimpleServer() {
         server = new Server();
@@ -28,8 +30,13 @@ public class SimpleServer {
     }
 
     public void start() {
+        if(server.getConnections().length < 2) {
+            gui.printConsole("No clients connected");
+            gui.printConsole("Aborting...");
+            return;
+        }
         server.start();
-        gui.printConsole("Server startet");
+        gui.printConsole("Server started");
         try {
             server.bind(11111,22222);
         } catch (IOException e) {
@@ -41,16 +48,17 @@ public class SimpleServer {
         createMap(gui.getWidth(),gui.getHeight(),gui.getWallChance(),gui.getDestructableWallChance());
         gui.printConsole("Map created");
 
+        gui.printConsole("Sending map to clients...");
         ServerVariables v = new ServerVariables(map);
         server.sendToAllTCP(v);
+        gui.printConsole("Ready");
 
-        server.addListener(new Listener() {
-            public void received(Connection connection, Object object) {
-                if(object instanceof ClientVariables) {
-                    ClientVariables cV = (ClientVariables) object;
-                }
-            }
-        });
+        running = true;
+        startTime = System.currentTimeMillis();
+
+        gui.printConsole("Running...");
+
+        run();
 
     }
 
@@ -58,10 +66,29 @@ public class SimpleServer {
         map = new Map(30,20,5,20);
     }
 
+    public void run() {
+            server.addListener(new Listener() {
+                public void received(Connection connection, Object object) {
+                    if(object instanceof ClientVariables) {
+                        ClientVariables cV = (ClientVariables) object;
+                    }
+                }
+            });
+    }
+
     public void freeze() {
+        if(running) {
+            server.sendToAllTCP(new ServerVariables((byte) 0)); //Pause
+            server.stop();
+            gui.printConsole("Server paused");
+        } else {
+            gui.printConsole("Can't pause. Server is not running");
+        }
     }
 
     public void shutDown() {
+        running = false;
         server.close();
+        gui.printConsole(String.format("Server has run %s Minutes", (System.currentTimeMillis()-startTime) / 60000));
     }
 }

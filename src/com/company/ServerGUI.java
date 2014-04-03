@@ -26,14 +26,15 @@ public class ServerGUI implements ActionListener{
 
     public ServerGUI(SimpleServer server) {
         this.server = server;
-        JFrame frame = new JFrame("ServerGUI");
+        JFrame frame = new JFrame("Server");
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(400, 300));
         frame.setVisible(true);
         startButton.addActionListener(this);
         closeButton.addActionListener(this);
-
+        freezeButton.addActionListener(this);
+        System.out.println("hier");
     }
 
     public void printConsole(String s) {
