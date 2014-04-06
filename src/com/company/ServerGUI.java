@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by winterj on 26.03.2014.
  */
-public class ServerGUI implements ActionListener{
+public class ServerGUI extends Thread implements ActionListener{
     private JButton startButton;
     private JButton freezeButton;
     private JButton editorModeButton;
@@ -21,16 +21,16 @@ public class ServerGUI implements ActionListener{
     private JSpinner spinner2;
     private JLabel wallC;
     private JLabel dWallC;
+    private JFrame frame;
     SimpleServer server;
 
 
     public ServerGUI(SimpleServer server) {
         this.server = server;
-        JFrame frame = new JFrame("Server");
+        frame = new JFrame("Server");
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(400, 300));
-        frame.setVisible(true);
+        frame.setMinimumSize(new Dimension(400, 400));
         startButton.addActionListener(this);
         closeButton.addActionListener(this);
         freezeButton.addActionListener(this);
@@ -75,5 +75,9 @@ public class ServerGUI implements ActionListener{
             server.shutDown();
             System.exit(1);
         }
+    }
+
+    public void run() {
+        frame.setVisible(true);
     }
 }

@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Created by winterj on 26.03.2014.
  */
-public class SimpleServer {
+public class SimpleServer extends Thread{
     Server server;
     private static Map map;
     private final int TCP = 11111;
@@ -23,13 +23,14 @@ public class SimpleServer {
     public SimpleServer() {
         server = new Server();
         gui = new ServerGUI(this);
+        gui.start();
     }
 
     public static void main(String[] args) {
         new SimpleServer();
     }
 
-    public void start() {
+    public void run() {
         server.start();
         if(server.getConnections().length < 2) {
             gui.printConsole("No clients connected");
@@ -59,7 +60,6 @@ public class SimpleServer {
         gui.printConsole("Running...");
 
         runGame();
-
     }
 
     private void runLobby() {
