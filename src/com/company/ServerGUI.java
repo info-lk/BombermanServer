@@ -57,6 +57,10 @@ public class ServerGUI implements ActionListener{
         return Double.parseDouble(dWallC.getText());
     }
 
+    public void redrawText() {
+        textArea1.repaint();
+    }
+
     @Override
     public void actionPerformed(ActionEvent aE) {
         if(aE.getSource() == startButton) {
