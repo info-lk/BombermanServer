@@ -1,5 +1,6 @@
 package com.company.network;
 
+import com.company.ExternClasses.Bomb;
 import com.company.ExternClasses.Map;
 import com.company.ExternClasses.Player;
 
@@ -8,20 +9,22 @@ import com.company.ExternClasses.Player;
  */
 public class ServerVariables {
 
-    public byte currentInformation = -1; //0 = All; 1 = Map; 2 = Players; 3 = command
+    public byte currentInformation = -1; //0 = Bomb and Player; 1 = Map; 2 = Player; 3 = command; 4 = bomb
 
     public Map map;
 
-    public Player[] player;
+    public Player player; //The player to update
 
-    public byte command;  //-1 = error| 0 = pause| 1 = kick| 2 = ?|
+    public Bomb bomb;
+
+    public byte command = -1;  //-1 = nothing|0 = pause| 1 = kick| 2 = ?|
 
     public ServerVariables(Map map) {
         this.map = map;
         currentInformation = 1;
     }
 
-    public ServerVariables(Player[] player) {
+    public ServerVariables(Player player) {
         this.player = player;
         currentInformation = 2;
     }
@@ -31,10 +34,14 @@ public class ServerVariables {
         currentInformation = 3;
     }
 
-    public ServerVariables(Map map, Player[] player, byte command) {
-        this.map = map;
+    public ServerVariables(Bomb bomb) {
+        this.bomb = bomb;
+        currentInformation = 4;
+    }
+
+    public ServerVariables(Bomb bomb, Player player) {
         this.player = player;
-        this.command = command;
+        this.bomb = bomb;
         currentInformation = 0;
     }
 }

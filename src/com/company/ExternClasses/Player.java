@@ -2,12 +2,18 @@ package com.company.ExternClasses;
 
 public class Player {
 
-    private double xPosition;
-    private double yPosition;
+    public double xPosition;
+    public double yPosition;
 
 
     //private double health;
 
-    private boolean hasShield;
+    public boolean hasShield;
+
+    public Player(double xPosition, double yPosition, boolean hasShield) {
+        this.hasShield = hasShield;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+    }
 
 }

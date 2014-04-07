@@ -1,6 +1,8 @@
 package com.company.network;
 
+import com.company.ExternClasses.Bomb;
 import com.company.ExternClasses.Map;
+import com.company.ExternClasses.Player;
 import com.company.ServerGUI;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -33,6 +35,8 @@ public class SimpleServer extends Thread{
     }
 
     public void run() {
+        server.getKryo().register(ServerVariables.class);
+        server.getKryo().register(ClientVariables.class);
         addListener();
         server.start();
         if(server.getConnections().length < 2) {
@@ -102,7 +106,7 @@ public class SimpleServer extends Thread{
                     if(lobby.allowsConnect()) {
                         lobby.join(connection);
                     } else {
-                        System.out.println("Client tries to connect but lobby is closed");
+                        System.out.println("Client tries to connect but lobby is closed or full");
                     }
                 }
 
@@ -115,7 +119,15 @@ public class SimpleServer extends Thread{
                 public void received(Connection connection, Object object) {
                     if(running && object instanceof ClientVariables) {
                         ClientVariables cV = (ClientVariables) object;
-                        server.sendToAllExceptTCP(connection.getRemoteAddressTCP().getAddress().getAddress());
+                        if(cV.currentInformation == 1) { //Player only
+                            server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new Player(cV.playerXPos,cV.playerYPos,cV.hasShield)));
+                        }
+                        if(cV.currentInformation == 2) {
+                            server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new Bomb(cV.bombXPos,cV.bombYPos,cV.kind)));
+                        }
+                        if(cV.currentInformation == 3) {
+                            server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new Bomb(cV.bombXPos,cV.bombYPos,cV.kind), new Player(cV.playerXPos,cV.playerYPos,cV.hasShield)));
+                        }
                     }
                 }
             });
