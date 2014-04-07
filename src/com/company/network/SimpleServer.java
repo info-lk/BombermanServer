@@ -19,9 +19,11 @@ public class SimpleServer extends Thread{
     ServerGUI gui;
     private boolean running;
     private long startTime;
+    private Lobby lobby;
 
     public SimpleServer() {
         server = new Server();
+        lobby = new Lobby();
         gui = new ServerGUI(this);
         gui.start();
     }
@@ -31,11 +33,15 @@ public class SimpleServer extends Thread{
     }
 
     public void run() {
+        addListener();
         server.start();
         if(server.getConnections().length < 2) {
             gui.printConsole("No clients connected");
             gui.printConsole("Opening Lobby");
-            runLobby();
+            if(!runLobby()) {
+                gui.printConsole("No clients found... closing");
+                return;
+            }
         }
         gui.printConsole("Server started");
         try {
@@ -46,7 +52,7 @@ public class SimpleServer extends Thread{
         gui.printConsole("Server bind to TCP ["+ TCP +"] and UDP ["+ UDP + "]");
 
         gui.printConsole("Creating map...");
-        createMap(gui.getWidth(),gui.getHeight(),gui.getWallChance(),gui.getDestructableWallChance());
+        map = new Map(gui.getWidth(),gui.getHeight(),gui.getWallChance(),gui.getDestructableWallChance());
         gui.printConsole("Map created");
 
         gui.printConsole("Sending map to clients...");
@@ -58,20 +64,19 @@ public class SimpleServer extends Thread{
         startTime = System.currentTimeMillis();
 
         gui.printConsole("Running...");
-
-        runGame();
     }
 
-    private void runLobby() {
+    private boolean runLobby() {
+        lobby.open();
         gui.printConsole("Waiting for Players...");
         startTime = System.currentTimeMillis();
         long stopTime = System.currentTimeMillis();
         while((stopTime - startTime) < 30000) {
             if(server.getConnections().length == 0) {
-                gui.printConsole("Searching... ["+(stopTime-startTime)/1000+"]");
+                gui.printConsole("Searching... ["+(stopTime-startTime)/1000+"|30]");
             }
             else {
-                gui.printConsole(String.format("[%s] player(s) in lobby", server.getConnections().length));
+                gui.printConsole(String.format("[%s] player(s) in lobby", lobby.getPlayerCount()));
             }
             try {
                 Thread.sleep(1000);
@@ -81,17 +86,36 @@ public class SimpleServer extends Thread{
             }
             stopTime = System.currentTimeMillis();
         }
+        lobby.close();
+        if(lobby.getPlayerCount() < 2) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    private void createMap(int width, int height, double wallChance, double destructableWallChance) {
-        map = new Map(30,20,5,20);
-    }
-
-    private void runGame() {
+    private void addListener() {
             server.addListener(new Listener() {
+
+                @Override
+                public void connected(Connection connection) {
+                    if(lobby.allowsConnect()) {
+                        lobby.join(connection);
+                    } else {
+                        System.out.println("Client tries to connect but lobby is closed");
+                    }
+                }
+
+                @Override
+                public void disconnected(Connection connection) {
+                    lobby.remove(connection);
+                }
+
+                @Override
                 public void received(Connection connection, Object object) {
-                    if(object instanceof ClientVariables) {
+                    if(running && object instanceof ClientVariables) {
                         ClientVariables cV = (ClientVariables) object;
+                        server.sendToAllExceptTCP(connection.getRemoteAddressTCP().getAddress().getAddress());
                     }
                 }
             });

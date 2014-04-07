@@ -10,12 +10,12 @@ import java.util.ArrayList;
 public class Lobby {
     private static final int MAX_PLAYERS = 4;
     ArrayList<Connection> players;
-    int count;
+    private int playerCount;
     private boolean allowConnect;
 
     public Lobby() {
         players = new ArrayList();
-        count = 0;
+        playerCount = 0;
     }
 
     public void open() {
@@ -27,13 +27,17 @@ public class Lobby {
     }
 
     public byte join(Connection connection) {
-        if(count < MAX_PLAYERS || !allowConnect) {
+        if(playerCount < MAX_PLAYERS || !allowConnect) {
             players.add(connection);
-            count++;
+            playerCount++;
             return 1;
         } else {
             return 0;
         }
+    }
+
+    public void remove(Connection connection) {
+        players.remove(connection);
     }
 
     public Connection[] toArray() {
@@ -56,4 +60,10 @@ public class Lobby {
     public boolean allowsConnect() {
         return allowConnect;
     }
+
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+
 }
