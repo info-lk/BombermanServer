@@ -19,8 +19,9 @@ public class ServerGUI extends Thread implements ActionListener{
     private JTextArea textArea1;
     private JSpinner spinner1;
     private JSpinner spinner2;
-    private JLabel wallC;
-    private JLabel dWallC;
+    private JTextField wallC;
+    private JTextField dWallC;
+    private JButton searchForCLientsButton;
     private JFrame frame;
     SimpleServer server;
 
@@ -74,6 +75,9 @@ public class ServerGUI extends Thread implements ActionListener{
         if(aE.getSource() == closeButton) {
             server.shutDown();
             System.exit(1);
+        }
+        if(aE.getSource() == searchForCLientsButton) {
+            server.runLobby();
         }
     }
 

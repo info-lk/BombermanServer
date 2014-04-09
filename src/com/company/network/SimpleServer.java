@@ -37,16 +37,9 @@ public class SimpleServer extends Thread{
     public void run() {
         server.getKryo().register(ServerVariables.class);
         server.getKryo().register(ClientVariables.class);
+        server.getKryo().register(String.class);
         addListener();
         server.start();
-        if(server.getConnections().length < 2) {
-            gui.printConsole("No clients connected");
-            gui.printConsole("Opening Lobby");
-            if(!runLobby()) {
-                gui.printConsole("No clients found... closing");
-                return;
-            }
-        }
         gui.printConsole("Server started");
         try {
             server.bind(11111,22222);
@@ -54,6 +47,15 @@ public class SimpleServer extends Thread{
             e.printStackTrace();
         }
         gui.printConsole("Server bind to TCP ["+ TCP +"] and UDP ["+ UDP + "]");
+        running = true;
+        if(server.getConnections().length < 2) {
+            gui.printConsole("No clients connected");
+            gui.printConsole("Opening Lobby");
+            if (!runLobby()) {
+                gui.printConsole("No clients found... closing");
+                return;
+            }
+        }
 
         gui.printConsole("Creating map...");
         map = new Map(gui.getWidth(),gui.getHeight(),gui.getWallChance(),gui.getDestructableWallChance());
@@ -64,13 +66,16 @@ public class SimpleServer extends Thread{
         server.sendToAllTCP(v);
         gui.printConsole("Ready");
 
-        running = true;
         startTime = System.currentTimeMillis();
 
         gui.printConsole("Running...");
     }
 
-    private boolean runLobby() {
+    public boolean runLobby() {
+        if(!running) {
+            gui.printConsole("Please start server first!");
+            return false;
+        }
         lobby.open();
         gui.printConsole("Waiting for Players...");
         startTime = System.currentTimeMillis();
@@ -103,6 +108,7 @@ public class SimpleServer extends Thread{
 
                 @Override
                 public void connected(Connection connection) {
+                    System.out.println("Connect!");
                     if(lobby.allowsConnect()) {
                         lobby.join(connection);
                     } else {
@@ -117,6 +123,7 @@ public class SimpleServer extends Thread{
 
                 @Override
                 public void received(Connection connection, Object object) {
+                    System.out.println("ping");
                     if(running && object instanceof ClientVariables) {
                         ClientVariables cV = (ClientVariables) object;
                         if(cV.currentInformation == 1) { //Player only
@@ -128,9 +135,20 @@ public class SimpleServer extends Thread{
                         if(cV.currentInformation == 3) {
                             server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new Bomb(cV.bombXPos,cV.bombYPos,cV.kind), new Player(cV.playerXPos,cV.playerYPos,cV.hasShield)));
                         }
+                    if(running && object instanceof String) {
+                        useCommands((String) object);
+                    }
                     }
                 }
             });
+    }
+
+    private void useCommands(String command) {
+        if(command.equals("nuke")) {
+
+        }else {
+            gui.printConsole("One client tried the command: '" + command +"'");
+        }
     }
 
     public void freeze() {
