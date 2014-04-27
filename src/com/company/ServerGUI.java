@@ -31,10 +31,12 @@ public class ServerGUI extends Thread implements ActionListener{
         frame = new JFrame("Server");
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(400, 400));
+        frame.setMinimumSize(new Dimension(400, 600));
         startButton.addActionListener(this);
         closeButton.addActionListener(this);
         freezeButton.addActionListener(this);
+        spinner1.setValue(16);
+        spinner2.setValue(16);
         System.out.println("hier");
     }
 

@@ -9,7 +9,8 @@ import com.company.ExternClasses.Player;
  */
 public class ServerVariables {
 
-    public byte currentInformation = -1; //0 = Bomb and Player; 1 = Map; 2 = Player; 3 = command; 4 = bomb
+    public enum CURRENT_INFORMATION {NONE, BOMB_PLAYER, MAP, PLAYER, BOMB, COMMAND}
+    public CURRENT_INFORMATION current = CURRENT_INFORMATION.NONE; //0 = Bomb and Player; 1 = Map; 2 = Player; 3 = command; 4 = bomb
 
     public Map map;
 
@@ -21,27 +22,27 @@ public class ServerVariables {
 
     public ServerVariables(Map map) {
         this.map = map;
-        currentInformation = 1;
+        current = CURRENT_INFORMATION.MAP;
     }
 
     public ServerVariables(Player player) {
         this.player = player;
-        currentInformation = 2;
+        current = CURRENT_INFORMATION.PLAYER;
     }
 
     public ServerVariables(byte command) {
         this.command = command;
-        currentInformation = 3;
+        current = CURRENT_INFORMATION.COMMAND;
     }
 
     public ServerVariables(Bomb bomb) {
         this.bomb = bomb;
-        currentInformation = 4;
+        current = CURRENT_INFORMATION.BOMB;
     }
 
     public ServerVariables(Bomb bomb, Player player) {
         this.player = player;
         this.bomb = bomb;
-        currentInformation = 0;
+        current = CURRENT_INFORMATION.BOMB_PLAYER;
     }
 }

@@ -11,7 +11,9 @@
       <grid id="bc9d9" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <minimum-size width="300" height="600"/>
+          </grid>
         </constraints>
         <properties/>
         <border type="none"/>
@@ -33,11 +35,13 @@
             <children>
               <component id="6e769" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <font name="Courier New" style="0"/>
+                </properties>
               </component>
             </children>
           </scrollpane>
-          <grid id="b8923" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="b8923" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -55,7 +59,7 @@
               </component>
               <component id="f756" class="javax.swing.JButton" binding="freezeButton" default-binding="true">
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Freeze"/>
@@ -63,7 +67,7 @@
               </component>
               <component id="9a748" class="javax.swing.JButton" binding="editorModeButton" default-binding="true">
                 <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="EditorMode"/>
@@ -71,13 +75,13 @@
               </component>
               <component id="ba9" class="javax.swing.JButton" binding="closeButton" default-binding="true">
                 <constraints>
-                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Close"/>
                 </properties>
               </component>
-              <grid id="8e7a0" layout-manager="GridLayoutManager" row-count="13" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="8e7a0" layout-manager="GridLayoutManager" row-count="12" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -115,14 +119,6 @@
                     </constraints>
                     <properties>
                       <text value="Zerstörbare Wände"/>
-                    </properties>
-                  </component>
-                  <component id="4ed40" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="?"/>
                     </properties>
                   </component>
                   <component id="b18bf" class="javax.swing.JSpinner" binding="spinner1" default-binding="true">
@@ -179,14 +175,6 @@
                   </component>
                 </children>
               </grid>
-              <component id="a315d" class="javax.swing.JButton" binding="searchForCLientsButton" default-binding="true">
-                <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Search for CLients"/>
-                </properties>
-              </component>
             </children>
           </grid>
         </children>

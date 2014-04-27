@@ -1,7 +1,6 @@
 package com.company.network;
 
 import com.esotericsoftware.kryonet.Connection;
-
 import java.util.ArrayList;
 
 /**
@@ -10,12 +9,10 @@ import java.util.ArrayList;
 public class Lobby {
     private static final int MAX_PLAYERS = 4;
     ArrayList<Connection> players;
-    private int playerCount;
     private boolean allowConnect;
 
     public Lobby() {
-        players = new ArrayList();
-        playerCount = 0;
+        players = new ArrayList<Connection>();
     }
 
     public void open() {
@@ -26,13 +23,12 @@ public class Lobby {
         allowConnect = false;
     }
 
-    public byte join(Connection connection) {
-        if(playerCount < MAX_PLAYERS || !allowConnect) {
+    public boolean join(Connection connection) {
+        if(getPlayerCount() < MAX_PLAYERS || !allowConnect) {
             players.add(connection);
-            playerCount++;
-            return 1;
+            return true;
         } else {
-            return 0;
+            return false;
         }
     }
 
@@ -62,7 +58,7 @@ public class Lobby {
     }
 
     public int getPlayerCount() {
-        return playerCount;
+        return players.size();
     }
 
 
