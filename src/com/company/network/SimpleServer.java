@@ -1,12 +1,14 @@
 package com.company.network;
 
-import com.company.ExternClasses.Map;
-import com.company.ExternClasses.VBomb;
-import com.company.ExternClasses.VPlayer;
 import com.company.ServerGUI;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import network.ClientVariables;
+import network.ServerVariables;
+import network.VBomb;
+import network.VPlayer;
+import network.Map;
 
 import java.io.IOException;
 import java.util.Random;
@@ -88,7 +90,7 @@ public class SimpleServer extends Thread{
         int id = 0;
         for (Connection c : lobby.toArray()) {
             c.sendTCP(new ServerVariables(id));
-            c.sendTCP(svPlayers);
+            c.sendTCP(svPlayers); //Hier kommt der Fehler
             id++;
         }
         gui.printConsole("Ready");
