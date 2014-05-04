@@ -79,9 +79,19 @@ public class SimpleServer extends Thread{
         server.sendToAllTCP(v);
         gui.printConsole("Ready");
 
+        for(Connection c : lobby.toArray()) {
+            c.sendTCP(new ServerVariables(generatePlayer(lobby.exclude(c))));
+        }
         startTime = System.currentTimeMillis();
 
         gui.printConsole("Running...");
+    }
+
+    private Player[] generatePlayers(Connection[] connections) {
+        Player[] pl = new Player[connections.length];
+        for(int i = 0; i < ) {
+            pl
+        }
     }
 
     public boolean runLobby() {
@@ -94,7 +104,7 @@ public class SimpleServer extends Thread{
         gui.printConsole("Waiting for Players...");
         startTime = System.currentTimeMillis();
         long stopTime = System.currentTimeMillis();
-        while((stopTime - startTime) < 10000) {
+        while((stopTime - startTime) < 30000) {
             if(server.getConnections().length == 0) {
                 gui.printConsole("Searching... ["+(stopTime-startTime)/1000+"|30]");
             }

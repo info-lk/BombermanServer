@@ -4,6 +4,7 @@ public class Player {
 
     public double xPosition;
     public double yPosition;
+    public int id;
 
 
     //private double health;

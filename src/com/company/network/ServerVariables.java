@@ -9,12 +9,13 @@ import com.company.ExternClasses.Player;
  */
 public class ServerVariables {
 
-    public enum CURRENT_INFORMATION {NONE, BOMB_PLAYER, MAP, PLAYER, BOMB, COMMAND}
+    public enum CURRENT_INFORMATION {NONE, BOMB_PLAYER, MAP, PLAYER, BOMB, COMMAND, PLAYER_LIST}
     public CURRENT_INFORMATION current = CURRENT_INFORMATION.NONE; //0 = Bomb and Player; 1 = Map; 2 = Player; 3 = command; 4 = bomb
 
     public Map map;
 
     public Player player; //The player to update
+    public Player[] players;
 
     public Bomb bomb;
 
@@ -28,6 +29,11 @@ public class ServerVariables {
     public ServerVariables(Player player) {
         this.player = player;
         current = CURRENT_INFORMATION.PLAYER;
+    }
+
+    public ServerVariables(Player[] players) {
+        this.players = players;
+        current = CURRENT_INFORMATION.PLAYER_LIST;
     }
 
     public ServerVariables(byte command) {
