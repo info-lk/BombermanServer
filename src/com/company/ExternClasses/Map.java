@@ -42,4 +42,12 @@ public class Map {
     public String getMapRepresentation(){
         return tiles.replace("0", "# ").replace("1", "+ ").replace("2", "  ");
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }

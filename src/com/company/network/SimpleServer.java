@@ -1,15 +1,15 @@
 package com.company.network;
 
-import com.company.ExternClasses.Bomb;
 import com.company.ExternClasses.Map;
-import com.company.ExternClasses.Player;
-import com.company.ExternClasses.Tile;
+import com.company.ExternClasses.VBomb;
+import com.company.ExternClasses.VPlayer;
 import com.company.ServerGUI;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Created by winterj on 26.03.2014.
@@ -42,6 +42,10 @@ public class SimpleServer extends Thread{
         server.getKryo().register(String.class);
         server.getKryo().register(LobbyVariables.class);
         server.getKryo().register(Map.class);
+        server.getKryo().register(VPlayer.class);
+        server.getKryo().register(VBomb.class);
+        server.getKryo().register(VPlayer[].class);
+        server.getKryo().register(VPlayer.DIRECTION.class);
         server.getKryo().register(int[][].class);
         server.getKryo().register(int[].class);
 
@@ -79,19 +83,28 @@ public class SimpleServer extends Thread{
         server.sendToAllTCP(v);
         gui.printConsole("Ready");
 
-        for(Connection c : lobby.toArray()) {
-            c.sendTCP(new ServerVariables(generatePlayer(lobby.exclude(c))));
+        gui.printConsole("Sending players");
+        ServerVariables svPlayers = new ServerVariables(generatePlayers(lobby.toArray()));
+        int id = 0;
+        for (Connection c : lobby.toArray()) {
+            c.sendTCP(new ServerVariables(id));
+            c.sendTCP(svPlayers);
+            id++;
         }
-        startTime = System.currentTimeMillis();
+        gui.printConsole("Ready");
 
+        startTime = System.currentTimeMillis();
         gui.printConsole("Running...");
     }
 
-    private Player[] generatePlayers(Connection[] connections) {
-        Player[] pl = new Player[connections.length];
-        for(int i = 0; i < ) {
-            pl
+
+    private VPlayer[] generatePlayers(Connection[] connections) {
+        Random ran = new Random();
+        VPlayer[] pl = new VPlayer[connections.length];
+        for(int i = 0; i < pl.length; i++) {
+            pl[i] = new VPlayer((double) ran.nextInt(map.getWidth() + 1), (double) ran.nextInt(map.getHeight() + 1), false, i);
         }
+        return pl;
     }
 
     public boolean runLobby() {
@@ -152,13 +165,13 @@ public class SimpleServer extends Thread{
                     if(running && object instanceof ClientVariables) {
                         ClientVariables cV = (ClientVariables) object;
                         if(cV.currentInformation == 1) { //Player only
-                            server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new Player(cV.playerXPos,cV.playerYPos,cV.hasShield)));
+                            server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new VPlayer(cV.playerXPos,cV.playerYPos,cV.hasShield, cV.ID)));
                         }
                         if(cV.currentInformation == 2) {
-                            server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new Bomb(cV.bombXPos,cV.bombYPos,cV.kind)));
+                            server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new VBomb(cV.bombXPos,cV.bombYPos,cV.kind)));
                         }
                         if(cV.currentInformation == 3) {
-                            server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new Bomb(cV.bombXPos,cV.bombYPos,cV.kind), new Player(cV.playerXPos,cV.playerYPos,cV.hasShield)));
+                            server.sendToAllExceptTCP(connection.getID(), new ServerVariables(new VBomb(cV.bombXPos,cV.bombYPos,cV.kind), new VPlayer(cV.playerXPos,cV.playerYPos,cV.hasShield, cV.ID)));
                         }
                     if(running && object instanceof String) {
                         useCommands((String) object);

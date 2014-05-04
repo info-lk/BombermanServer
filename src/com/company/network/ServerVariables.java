@@ -1,39 +1,41 @@
 package com.company.network;
 
-import com.company.ExternClasses.Bomb;
+
 import com.company.ExternClasses.Map;
-import com.company.ExternClasses.Player;
+import com.company.ExternClasses.VBomb;
+import com.company.ExternClasses.VPlayer;
 
 /**
  * Created by winterj on 26.03.2014.
  */
 public class ServerVariables {
 
-    public enum CURRENT_INFORMATION {NONE, BOMB_PLAYER, MAP, PLAYER, BOMB, COMMAND, PLAYER_LIST}
-    public CURRENT_INFORMATION current = CURRENT_INFORMATION.NONE; //0 = Bomb and Player; 1 = Map; 2 = Player; 3 = command; 4 = bomb
 
+    public enum CURRENT_INFORMATION {NONE, BOMB_PLAYER, MAP, PLAYER, PLAYERS, BOMB, ID, COMMAND}
+    public CURRENT_INFORMATION current;
     public Map map;
 
-    public Player player; //The player to update
-    public Player[] players;
+    public VPlayer player; //The player to update
+    public VPlayer[] players; //All players
 
-    public Bomb bomb;
+    public VBomb bomb;
 
-    public byte command = -1;  //-1 = nothing|0 = pause| 1 = kick| 2 = ?|
+    int ID;
+
+    public byte command = -1;  //-1 = nothing|0 = pause| 1 = kick| 2 = resume|
+
+    public ServerVariables(){
+
+    }
 
     public ServerVariables(Map map) {
         this.map = map;
         current = CURRENT_INFORMATION.MAP;
     }
 
-    public ServerVariables(Player player) {
+    public ServerVariables(VPlayer player) {
         this.player = player;
         current = CURRENT_INFORMATION.PLAYER;
-    }
-
-    public ServerVariables(Player[] players) {
-        this.players = players;
-        current = CURRENT_INFORMATION.PLAYER_LIST;
     }
 
     public ServerVariables(byte command) {
@@ -41,14 +43,24 @@ public class ServerVariables {
         current = CURRENT_INFORMATION.COMMAND;
     }
 
-    public ServerVariables(Bomb bomb) {
+    public ServerVariables(VBomb bomb) {
         this.bomb = bomb;
         current = CURRENT_INFORMATION.BOMB;
     }
 
-    public ServerVariables(Bomb bomb, Player player) {
+    public ServerVariables(VBomb bomb, VPlayer player) {
         this.player = player;
         this.bomb = bomb;
         current = CURRENT_INFORMATION.BOMB_PLAYER;
+    }
+
+    public ServerVariables(VPlayer[] vPlayers) {
+        players = vPlayers;
+        current = CURRENT_INFORMATION.PLAYERS;
+    }
+
+    public ServerVariables(int ID) {
+        this.ID = ID;
+        current = CURRENT_INFORMATION.ID;
     }
 }

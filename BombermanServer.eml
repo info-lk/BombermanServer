@@ -3,7 +3,4 @@
 	<output-test url="file://$MODULE_DIR$/out/test/BombermanServer"/>
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$"/>
-	<levels>
-		<level name="kryonet-2.21-all" value="project"/>
-	</levels>
 </component>
